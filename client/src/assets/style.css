@@ -3,6 +3,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* :root {
+  --sidebar-width: 13rem;
+  --sidebar-gap: 4px; breathing room */
+/* } */
+
+.layout {
+  --sidebar-width: 13rem;   /* Default width */
+  --sidebar-gap: 0px;       /* Default gap */
+  display: flex;
+}
+
 
 * {
 	box-sizing: border-box;
@@ -44,7 +55,7 @@ a {
 	margin: 15px 0;
 }
 
-button {
+/* button {
 	border-radius: 20px;
 	border: 1px solid #FF4B2B;
 	background-color: #FF4B2B;
@@ -68,7 +79,52 @@ button:focus {
 button.ghost {
 	background-color: transparent;
 	border-color: #FFFFFF;
+} */
+
+/* --- LOGIN PAGE BUTTON STYLES --- */
+.login-btn {
+	border-radius: 20px;
+	border: 1px solid #FF4B2B;
+	background-color: #FF4B2B;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
 }
+
+.login-btn:active {
+	transform: scale(0.95);
+}
+
+.login-btn:focus {
+	outline: none;
+}
+
+.login-btn.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+
+/* MyAircraft icon buttons - overrides global button styles */
+.icon-button {
+  all: unset; /* removes all inherited button styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-button svg {
+  width: 25px; /* bigger icon */
+  height: 25px;
+}
+.icon-button:hover {
+  color: #2563eb; /* blue on hover - adjust as needed */
+}
+
 
 form {
 	background-color: #FFFFFF;
@@ -90,16 +146,19 @@ input {
 }
 
 .container {
-	background-color: #fff;
-	border-radius: 10px;
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
-	position: relative;
-	overflow: hidden;
-	width: 768px;
-	max-width: 100%;
-	min-height: 480px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+              0 10px 10px rgba(0,0,0,0.22);
+  position: relative;
+  overflow: hidden;
+  
+  width: 90%;        /* 🔥 responsive width */
+  max-width: 900px;  /* set a reasonable max */
+  min-height: 480px;
+  display: flex;
 }
+
 
 .form-container {
 	position: absolute;
@@ -276,4 +335,1312 @@ footer a {
 .animate-pulse-scale {
   animation: pulse-scale 1.5s ease-in-out infinite;
 }
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 13rem; /* fixed width */
+  background-color: #FF4B2B;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  padding-top: 1rem; /* only vertical padding */
+  box-sizing: border-box; /* ensures width stays 13rem */
+}
 
+.sidebar-top {
+  padding: 0; /* ❌ remove horizontal padding */
+}
+
+.sidebar-logo {
+  max-width: 150px;
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+.sidebar-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0; /* ❌ remove horizontal padding */
+  overflow-y: auto;
+}
+
+.sidebar-bottom {
+  padding: 0 0 1rem 0; /* ❌ remove horizontal padding, keep bottom */
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Now links get their own padding */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.5rem 1rem; /* ✅ horizontal padding here only */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  font-weight: 500;
+  color: white;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 🔥 Active Link Styling */
+.sidebar-link.active {
+  background-color: rgba(0, 0, 0, 0.2); /* subtle black overlay */
+  color: white;
+  border-left: 4px solid white; /* optional white indicator bar */
+  padding-left: calc(1rem - 4px); /* keep text aligned after border */
+}
+
+.sidebar-link.active .sidebar-icon {
+  color: white;
+}
+
+.sidebar-icon {
+  font-size: 1rem;
+}
+
+.sidebar-text {
+  font-size: 0.875rem;
+}
+
+.blur {
+  filter: blur(2px);
+}
+
+
+/* === Dashboard styles === */
+.dashboard-container {
+  padding: 40px 60px 60px 240px; /* left padding adjusted for sidebar */
+  padding-top: 5rem; /* For topbar spacing */
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.dashboard-heading {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 50px;
+  color: #1f2937; /* Tailwind's text-gray-800 */
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+.dashboard-card {
+  background-color: white;
+  padding: 50px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-card.clickable {
+  cursor: pointer;
+}
+
+.dashboard-icon {
+  margin-bottom: 16px;
+}
+
+.dashboard-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+
+/* ===== Topbar Styling ===== */
+
+.topbar-wrapper {
+  background-color: #FF4B2B;
+  height: 4rem;
+  width: calc(133% - 30rem); /* Adjust based on sidebar width */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+}
+
+.topbar-left-space {
+  width: 16rem; /* Optional for spacing balance */
+}
+
+.topbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topbar-title {
+  background-color: white;
+  border-radius: 9999px;
+  padding: 10px 32px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: black;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.topbar-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.search-input {
+  padding: 10px 12px 10px 36px;
+  border-radius: 6px;
+  border: none;
+  background-color: white;
+  font-size: 0.9rem;
+  width: 16rem;
+  outline: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+
+/* DEFAULT DASHBOARD STYLING */
+.defaulltdashboard-container {
+  padding: 40px 60px 60px 240px; /* left padding adjusted for sidebar */
+  padding-top: 5rem; /* For topbar spacing */
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.defaultdashboard-heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.defaultdashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.defaultdashboard-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.defaultdashboard-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+}
+
+.defaultdashboard-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.defaultdashboard-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #555;
+}
+
+.defaultdashboard-count {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2b6cb0;
+}
+
+/*ADMINISTRATION BUTTON STYLING*/
+
+.summary-cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  flex: 1;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-title {
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.card-value {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-context {
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* Styling for the Add New User button */
+.add-user-btn {
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.add-user-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Styling for the search input field - This is the global one, adjust for context */
+.search-input {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Styling for table action buttons */
+.table-btn {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.edit-btn {
+  color: #3b82f6;
+  background-color: transparent;
+  border: 1px solid #3b82f6;
+}
+
+.edit-btn:hover {
+  background-color: #eff6ff;
+}
+
+.delete-btn {
+  color: #ef4444;
+  background-color: transparent;
+  border: 1px solid #ef4444;
+}
+
+.delete-btn:hover {
+  background-color: #fef2f2;
+}
+
+/* === Administration Page Specific Layout Overrides (Top Bar Fix Included) === */
+
+.topbar-wrapper .search-input {
+    /* Re-enforce the topbar search bar width to prevent it from collapsing */
+    width: 16rem !important;
+}
+
+.topbar-search .search-icon {
+    /* Ensure the icon is above the input and correctly positioned */
+    z-index: 40 !important;
+    position: absolute !important;
+}
+
+.user-management-section .flex.items-center.gap-8 {
+    /* Ensures the search bar and button are on the same line and respect the gap */
+    display: flex !important;
+    align-items: center !important;
+    gap: 32px !important; /* gap-8 = 32px */
+}
+
+.user-management-section .search-input {
+    /* Now, we make the Administration search input flexible to push the button right */
+    width: 100% !important;
+    max-width: none !important;
+}
+
+.user-management-section .add-user-btn {
+    /* Ensure button doesn't shrink and remains on the right */
+    flex-shrink: 0 !important;
+}
+
+.user-management-section .py-3.px-4:last-child > .flex.gap-2 {
+    /* Target the action button container and ensure gap is applied */
+    display: flex !important;
+    gap: 8px !important; /* gap-2 = 8px */
+    justify-content: flex-start !important;
+}
+
+/* Styling for the Add New User button */
+.add-user-btn {
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.add-user-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Styling for the search input field */
+.search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Styling for table action buttons */
+.table-btn {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.edit-btn {
+  color: #3b82f6;
+  background-color: transparent;
+  border: 1px solid #3b82f6;
+}
+
+.edit-btn:hover {
+  background-color: #eff6ff;
+}
+
+.delete-btn {
+  color: #ef4444;
+  background-color: transparent;
+  border: 1px solid #ef4444;
+}
+
+.delete-btn:hover {
+  background-color: #fef2f2;
+}
+
+/* Modal Overlay and Container */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-title-wrapper {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: #6b7280;
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.save-btn {
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.save-btn:hover {
+  background-color: #2563eb;
+}
+
+.cancel-btn {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.cancel-btn:hover {
+  background-color: #e5e7eb;
+}
+
+/* === Aircraft Detail Page Fixes === */
+/* Aircraft Detail Page Fix - Prevent global img from stretching */
+/* .aircraft-detail-page img {
+  width: auto !important;
+  height: auto !important;
+  max-width: 260px !important;
+  max-height: 180px !important;
+  object-fit: contain !important;
+  display: block;
+  margin: 0 auto;
+} */
+
+.aircraft-image {
+  max-width: 250px;
+  max-height: 160px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+}
+
+.aircraft-detail-page .container {
+  all: unset; /* Prevent global .container rules from breaking layout */
+}
+
+/* Ensure equal width for image + info card */
+.aircraft-detail-page .grid > div {
+  flex: 1;
+}
+
+/* Fix aircraft image shape */
+.aircraft-detail-page .aircraft-image {
+  width: auto !important;
+  height: auto !important;
+  max-width: 260px !important;
+  max-height: 180px !important;
+  object-fit: contain !important;
+  display: block;
+  margin: 0 auto;
+}
+
+/* === Aircraft Detail Page Container === */
+.detail-container {
+  padding: 2rem 0.5rem 0.5rem 0.5rem;   /* ⬅ removed top padding */
+  background-color: #f8f8f8;   /* match figma light bg */
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* === Aircraft Header Bar === */
+.aircraft-header-bar {
+  background-color: #D9D9D9;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  /* stretch full width across content (cancel container padding) */
+  margin: 0 -2rem 1rem -2rem;
+  width: calc(100% + 4rem);
+
+  box-sizing: border-box;
+}
+
+/*ANALYTICS STYLING*/
+.analytics-container {
+  padding: 20px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.analytics-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.analytics-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.analytics-card h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.small-card {
+  text-align: center;
+}
+
+.kpi {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+}
+
+.subtext {
+  font-size: 14px;
+  color: #777;
+}
+/* =================================== */
+/* ===== CAMO ANALYTICS DASHBOARD STYLES ===== */
+/* =================================== */
+
+.analytics-dashboard {
+  padding: 24px;
+  font-family: sans-serif;
+  color: #333;
+  background-color: #f7fafc;
+}
+
+.analytics-dashboard .dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.analytics-dashboard .stat-card,
+.analytics-dashboard .chart-container,
+.analytics-dashboard .table-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.analytics-dashboard .stat-card h3,
+.analytics-dashboard .chart-container h3,
+.analytics-dashboard .table-container h3 {
+  font-size: 16px;
+  color: #4a5568;
+  margin: 0 0 12px 0;
+}
+
+.analytics-dashboard .stat-card .value {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.analytics-dashboard .grid-col-span-2 {
+  grid-column: span 2;
+}
+
+.analytics-dashboard .grid-col-span-4 {
+  grid-column: span 4;
+}
+
+.analytics-dashboard .defects-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.analytics-dashboard .defects-table th,
+.analytics-dashboard .defects-table td {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* ===== GLOBAL ===== */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  overflow-x: hidden;
+}
+
+.aircraft-container {
+  padding: 1.5rem 2rem;
+  margin-top: 4rem;
+}
+
+/* ===== TABLE ===== */
+.aircraft-table-wrapper {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.aircraft-table-wrapper.compact {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.aircraft-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.88rem;
+}
+
+.aircraft-table thead {
+  background: linear-gradient(90deg, #ff4b2b, #ff416c);
+  color: white;
+}
+
+.aircraft-table th,
+.aircraft-table td {
+  padding: 8px 10px;
+  text-align: center;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.aircraft-row:hover {
+  background-color: #f9fafc;
+  transition: background 0.2s ease-in-out;
+}
+
+/* ===== STATUS ===== */
+.status-green {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.status-red {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.action-buttons button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease;
+}
+
+.action-buttons button:hover {
+  transform: scale(1.15);
+}
+
+/* ===== EXPANDED SECTION ===== */
+.expanded-cell {
+  background-color: #fafafa;
+  padding: 1rem 1.5rem;
+}
+
+.module-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.module-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f1f1;
+  color: #333;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.module-btn:hover {
+  background: linear-gradient(90deg, #ff4b2b, #ff416c);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(255, 75, 43, 0.3);
+}
+
+/* ===== PAGINATION ===== */
+.pagination {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination select {
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+.pagination button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* ===== AIRCRAFT DETAILS PAGE ===== */
+.details-container {
+  padding: 2rem;
+  margin-top: 4rem;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.back-btn {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #ff4b2b;
+  color: white;
+  border-color: #ff4b2b;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== TABS ===== */
+.details-tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.details-tab {
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #555;
+  border-bottom: 3px solid transparent;
+  background: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.details-tab:hover {
+  color: #ff4b2b;
+}
+
+.active-tab {
+  color: #ff4b2b;
+  border-bottom: 3px solid #ff4b2b;
+}
+
+/* ===== CONTENT ===== */
+.details-content {
+  padding-bottom: 2rem;
+}
+
+.placeholder-card {
+  background: white;
+  border-radius: 10px;
+  padding: 3rem;
+  text-align: center;
+  color: #777;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== INFO CARD ===== */
+.info-card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem 2rem;
+  gap: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-3px);
+}
+
+.info-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.info-image {
+  border-radius: 12px;
+  border: 1px solid #eee;
+  width: 260px;
+  height: 160px;
+  object-fit: contain;
+}
+
+.update-link {
+  color: #ff4b2b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  transition: color 0.2s;
+}
+
+.update-link:hover {
+  color: #ff6347;
+}
+
+.info-right {
+  flex: 1;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-label {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.info-value {
+  font-weight: 600;
+  color: #333;
+  margin-top: 2px;
+}
+
+/* ===== ENGINE TABLE ===== */
+.engine-table-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem 2rem;
+}
+
+.engine-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.engine-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.engine-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.engine-table th {
+  text-align: left;
+  background: #f9fafc;
+  color: #555;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.engine-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #444;
+}
+
+.engine-table tr:hover {
+  background-color: #fff4f1;
+  transition: 0.2s ease;
+}
+/* ========================================================= */
+/* MY MATERIALS PAGE STYLES */
+/* ========================================================= */
+
+.page-container {
+    padding: 20px;
+}
+
+.page-header h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #333;
+}
+
+.materials-content {
+    display: flex;
+    gap: 20px;
+}
+
+.materials-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ----------------- Alerts Sidebar ----------------- */
+.materials-alerts {
+    flex-shrink: 0;
+    width: 280px; /* Fixed width for the sidebar */
+}
+
+.materials-alerts h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.alert-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.alert-card p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.alert-card strong {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.low-stock-alert {
+    border-left: 5px solid #ff4d4f; /* Red/Critical */
+    background-color: #fff1f0; /* Light red background */
+}
+
+.expiring-alert {
+    border-left: 5px solid #faad14; /* Yellow/Warning */
+    background-color: #fffbe6; /* Light yellow background */
+}
+
+.alert-icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+/* ----------------- Main Controls ----------------- */
+.materials-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Assuming you have global .btn-primary, .btn-secondary, etc. styles. 
+   If not, define them here for a clean look: */
+.btn-primary { 
+    background-color: #ff4d4f; /* AVIAJET red/orange */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.btn-secondary {
+    background-color: #1890ff; /* Blue */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.btn-tertiary {
+    background-color: #f0f0f0; /* Light Gray */
+    color: #333;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.materials-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-input, .filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    height: 38px; /* Standardize height */
+    box-sizing: border-box;
+}
+
+.filter-input {
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+
+/* ----------------- Table Styles ----------------- */
+.materials-table-container {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.materials-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.materials-table th, .materials-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.materials-table th {
+    background-color: #f7f7f7;
+    font-weight: 600;
+    color: #555;
+}
+
+.materials-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+    color: white;
+}
+
+.status-badge.serviceable {
+    background-color: #52c41a; /* Green */
+}
+
+.status-badge.unserviceable {
+    background-color: #ff4d4f; /* Red */
+}
+
+.alert-indicator {
+    font-size: 1.1em;
+    cursor: help;
+}
+
+.alert-indicator.critical {
+    color: #ff4d4f; /* Red */
+}
+
+.alert-indicator.low {
+    color: #faad14; /* Orange */
+}
+
+.alert-indicator.ok {
+    color: #52c41a; /* Green */
+}
+
+.alert-indicator.repair {
+    color: #1890ff; /* Blue */
+}
+
+.action-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-right: 5px;
+    transition: color 0.2s;
+}
+
+.action-icon-btn:hover {
+    color: #ff4d4f;
+}
+
+.table-footer {
+    padding: 10px 15px;
+    text-align: right;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.materials-table a {
+    color: #1890ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+.materials-table a:hover {
+    text-decoration: underline;
+}

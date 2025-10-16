@@ -8,25 +8,47 @@ import {
   FaCreditCard,
   FaChartBar,
   FaComments,
+  FaThLarge,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import "../assets/style.css"; // 👈 Link to your CSS
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { title: "Default Dashboard", icon: <FaTachometerAlt size={36} className="text-blue-500" /> },
-    { title: "Administration", icon: <FaUserShield size={36} className="text-purple-500" /> },
+    {
+      title: "Default Dashboard",
+      icon: <FaThLarge size={40} className="text-blue-500" />,
+      route: "/default-dashboard",
+    },
+    {
+      title: "Administration",
+      icon: <FaUserShield size={40} className="text-purple-500" />,
+      route: "/administration",
+    },
     {
       title: "My Aircraft",
-      icon: <FaPlane size={36} className="text-green-500" />,
-      route: "/my-aircraft", // 👈 define the route here
+      icon: <FaPlane size={40} className="text-green-500" />,
+      route: "/my-aircraft",
     },
-    { title: "My Materials", icon: <FaWarehouse size={36} className="text-orange-500" /> },
-    { title: "My Resources", icon: <FaUsers size={36} className="text-pink-500" /> },
-    { title: "My Financials", icon: <FaCreditCard size={36} className="text-yellow-500" /> },
-    { title: "Analytics", icon: <FaChartBar size={36} className="text-teal-500" /> },
-    { title: "Chat", icon: <FaComments size={36} className="text-red-500" /> },
+    {
+      title: "My Materials",
+      icon: <FaWarehouse size={40} className="text-orange-500" />,
+      route: "/my-materials",
+    },
+    { title: "My Resources", icon: <FaUsers size={40} className="text-pink-500" /> },
+    { title: "My Financials", icon: <FaCreditCard size={40} className="text-yellow-500" /> },
+    {
+      title: "Analytics",
+      icon: <FaChartBar size={40} className="text-teal-500" />,
+      route: "/analytics",   // ✅ Added route
+    },
+    {
+      title: "Chat",
+      icon: <FaComments size={40} className="text-teal-500" />,
+      route: "/ai",   // ✅ Added route
+    },
   ];
 
   const handleCardClick = (route) => {
@@ -34,20 +56,18 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-8">
-      <h2 className="text-3xl font-bold mb-12 text-gray-800 text-center">Hello! User.</h2>
+    <div className="dashboard-container">
+      <h2 className="dashboard-heading">Hello! User.</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="dashboard-grid">
         {menuItems.map((item, index) => (
           <div
             key={index}
-            onClick={() => handleCardClick(item.route)} // ✅ only clickable if `route` exists
-            className={`bg-white rounded-xl shadow-md px-6 py-10 flex flex-col items-center justify-center text-center hover:shadow-xl hover:scale-105 transition-all duration-300 ${item.route ? 'cursor-pointer' : ''}`}
+            onClick={() => handleCardClick(item.route)}
+            className={`dashboard-card ${item.route ? "clickable" : ""}`}
           >
-            <div className="mb-4">{item.icon}</div>
-            <div className="text-lg font-semibold text-gray-800">
-              {item.title}
-            </div>
+            <div className="dashboard-icon">{item.icon}</div>
+            <div className="dashboard-title">{item.title}</div>
           </div>
         ))}
       </div>

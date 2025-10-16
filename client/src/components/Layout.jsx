@@ -4,21 +4,30 @@ import Topbar from "./Topbar";
 
 const Layout = ({ children }) => {
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Sidebar (fixed width) */}
-      <div className="w-64 flex-shrink-0">
-        <Sidebar />
-      </div>
+    <div className="layout">
+      {/* Sidebar */}
+      <Sidebar />
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Topbar */}
-        <div className="h-16 flex-shrink-0">
-          <Topbar />
-        </div>
-
-        {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-gray-100 p-6">
+      {/* Main Section */}
+      <div
+        style={{
+          marginLeft: "calc(var(--sidebar-width) + var(--sidebar-gap))",
+          flex: 1,
+          height: "100vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Topbar />
+        <main
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            background: "#f6f5f7",
+            padding: "1.5rem",
+          }}
+        >
           {children}
         </main>
       </div>

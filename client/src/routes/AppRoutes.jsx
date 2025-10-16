@@ -1,11 +1,19 @@
+// AppRoutes.jsx
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Dashboard from '../pages/Dashboard';
-import MyAircraft from '../pages/MyAircraft'; // ✅ Component name stays PascalCase
+import DefaultDashboard from '../pages/DefaultDashboard';
+import MyAircraft from '../pages/MyAircraft';
+import AircraftDetails from '../pages/AircraftDetails';
+import Administration from '../pages/Administration';
+import MyMaterials from '../pages/MyMaterials';
+import Analytics from '../pages/Analytics';
+import AIAssistance from '../pages/AIAssistant';
 import ProtectedRoute from './ProtectedRoute';
 import Layout from '../components/Layout';
+import AIAssistant from '../pages/AIAssistant';
 
 const AppRoutes = () => {
   return (
@@ -27,11 +35,77 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/my-aircraft" // ✅ Changed to kebab-case
+        path="/default-dashboard"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <DefaultDashboard />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/my-aircraft"
         element={
           <ProtectedRoute>
             <Layout>
               <MyAircraft />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/aircraft-details"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <AircraftDetails />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/my-materials"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <MyMaterials />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/administration"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Administration />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Analytics />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/ai"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <AIAssistant />
             </Layout>
           </ProtectedRoute>
         }
