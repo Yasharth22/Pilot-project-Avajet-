@@ -1,21 +1,14 @@
 import React, { useState } from "react";
-// We are temporarily commenting out the CSS import that caused the compile error.
-// import "../assets/style.css"; 
 
 // The component now handles API submission instead of local state
-const AddUserForm = ({ onClose, onUserAdded }) => { // Added onUserAdded prop
-    // We now track the new user details AND the admin's password for verification
+const AddUserForm = ({ onClose, onUserAdded }) => { 
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         role: "",
-        // New field to collect the password for admin verification
-        // NOTE: If you are not using this field on the backend yet, 
-        // it's okay to keep it for future implementation.
+
         adminPassword: "", 
-        // We need a password for the *new* user, as your database schema requires it
-        // I'm adding a dummy field here that should be replaced with a proper
-        // 'password' input in a final version, but we are keeping your existing logic:
+
         password: "tempPassword123!", 
     });
     
@@ -32,12 +25,8 @@ const AddUserForm = ({ onClose, onUserAdded }) => { // Added onUserAdded prop
         setMessage('');
         setIsSubmitting(true);
         
-        // ✅ FIX CONFIRMED: Corrected API endpoint. It should be http://localhost:5000/api 
-        // as per the current backend routing (app.js uses /api and userRoutes.js uses /)
         const apiEndpoint = "http://localhost:5000/api/users"; 
 
-        // We must include the password field for the new user, as the backend expects it 
-        // (even if temporarily hardcoded based on your controller's logic)
         const postData = {
             name: formData.name,
             email: formData.email,

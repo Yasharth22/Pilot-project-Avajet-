@@ -9,6 +9,8 @@ import MyAircraft from '../pages/MyAircraft';
 import AircraftDetails from '../pages/AircraftDetails';
 import Administration from '../pages/Administration';
 import MyMaterials from '../pages/MyMaterials';
+import MyResources from '../pages/MyResources';
+import MyFinancials from '../pages/MyFinancials';
 import Analytics from '../pages/Analytics';
 import AIAssistance from '../pages/AIAssistant';
 import ProtectedRoute from './ProtectedRoute';
@@ -84,6 +86,28 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <Administration />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/my-resources"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <MyResources />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/my-financials"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <MyFinancials />
             </Layout>
           </ProtectedRoute>
         }

@@ -9,3 +9,13 @@ export default {
   },
   plugins: [],
 };
+
+module.exports = {
+  theme: {
+    extend: {
+      spacing: {
+        '64': '16rem', // Adds back support for w-64 if it's missing
+      },
+    },
+  },
+};

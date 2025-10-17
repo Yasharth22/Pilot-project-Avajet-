@@ -11,7 +11,7 @@ import {
   FaThLarge,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import "../assets/style.css"; // 👈 Link to your CSS
+import "../assets/style.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -37,8 +37,16 @@ const Dashboard = () => {
       icon: <FaWarehouse size={40} className="text-orange-500" />,
       route: "/my-materials",
     },
-    { title: "My Resources", icon: <FaUsers size={40} className="text-pink-500" /> },
-    { title: "My Financials", icon: <FaCreditCard size={40} className="text-yellow-500" /> },
+    {
+      title: "My Resources",
+      icon: <FaUsers size={40} className="text-pink-500" />,
+      route: "/my-resources",
+    },
+    {
+      title: "My Financials",
+      icon: <FaCreditCard size={40} className="text-yellow-500" />,
+      route: "/my-financials",
+    },
     {
       title: "Analytics",
       icon: <FaChartBar size={40} className="text-teal-500" />,
