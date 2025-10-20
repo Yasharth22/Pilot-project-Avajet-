@@ -13,6 +13,7 @@ import MyResources from '../pages/MyResources';
 import MyFinancials from '../pages/MyFinancials';
 import Analytics from '../pages/Analytics';
 import AIAssistance from '../pages/AIAssistant';
+import MyActions from '../pages/MyActions';
 import ProtectedRoute from './ProtectedRoute';
 import Layout from '../components/Layout';
 import AIAssistant from '../pages/AIAssistant';
@@ -83,7 +84,7 @@ const AppRoutes = () => {
       <Route
         path="/administration"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin"]}>
             <Layout>
               <Administration />
             </Layout>
@@ -105,7 +106,7 @@ const AppRoutes = () => {
       <Route
         path="/my-financials"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin"]}>
             <Layout>
               <MyFinancials />
             </Layout>
@@ -130,6 +131,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <AIAssistant />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/my-actions"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <MyActions />
             </Layout>
           </ProtectedRoute>
         }

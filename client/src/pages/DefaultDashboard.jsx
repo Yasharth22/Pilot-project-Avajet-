@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/style.css"; // Custom dashboard styles
+import "../assets/style.css";
 
 const DefaultDashboard = () => {
   const cards = [
@@ -22,7 +22,7 @@ const DefaultDashboard = () => {
     <div className="defaultdashboard-container">
       <h2 className="defaultdashboard-heading">Dashboard Overview</h2>
 
-      <div className="dashboard-grid">
+      <div className="defaultdashboard-grid">
         {cards.map((card, index) => (
           <div key={index} className="defaultdashboard-card">
             <div className="defaultdashboard-icon">{card.icon}</div>
@@ -36,4 +36,3 @@ const DefaultDashboard = () => {
 };
 
 export default DefaultDashboard;
-  

@@ -1,7 +1,9 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/Card";
+import "../assets/style.css"; 
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell, ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis
+  BarChart, Bar, XAxis, YAxis, Tooltip, Legend,
+  PieChart, Pie, Cell, ResponsiveContainer,
+  RadialBarChart, RadialBar, PolarAngleAxis
 } from "recharts";
 
 // --- Sample Data ---
@@ -11,191 +13,153 @@ const maintenanceData = [
   { name: 'C Check', downtime: 180 },
   { name: 'D Check', downtime: 150 },
 ];
+
 const failureData = [
   { name: 'Engine #1', rate: 95 },
   { name: 'APU', rate: 85 },
   { name: 'Landing Gear', rate: 40 },
   { name: 'Avionics', rate: 35 },
 ];
+
 const complianceData = [
   { name: 'AD Completed', value: 75 },
   { name: 'SB Outstanding', value: 15 },
   { name: 'EO Outstanding', value: 10 },
 ];
+
 const complianceColors = ['#22C55E', '#F97316', '#EF4444'];
+
 const defectsData = [
-    { reg: 'N12345', desc: 'Engine Oil Leak', days: 15, cat: 'CAT B' },
-    { reg: 'N54321', desc: 'Cracked window pane', days: 12, cat: 'CAT C' },
-    { reg: 'N67890', desc: 'Landing gear sensor fail', days: 8, cat: 'CAT A' },
+  { reg: 'N12345', desc: 'Engine Oil Leak', days: 15, cat: 'CAT B' },
+  { reg: 'N54321', desc: 'Cracked window pane', days: 12, cat: 'CAT C' },
+  { reg: 'N67890', desc: 'Landing gear sensor fail', days: 8, cat: 'CAT A' },
 ];
-// Data for the Stat Card Gauges
+
 const airworthyData = [{ name: 'Airworthy', value: 98.5 }];
 const aogData = [{ name: 'AOG', value: 20 }];
 const defectsGaugeData = [{ name: 'Defects', value: 45 }];
 const checksData = [{ name: 'Checks', value: 75 }];
 
-
 const Analytics = () => {
   return (
-    <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div className="defaultdashboard-container" style={{ padding: '5rem 2rem', background: '#f9fafb' }}>
+      <h2 className="defaultdashboard-heading" style={{ textAlign: 'left', fontSize: '2rem', marginBottom: '2rem' }}>
+        Analytics Overview
+      </h2>
 
+      <div className="defaultdashboard-grid">
         {/* Maintenance Due Forecast */}
-        <Card className="lg:col-span-2 shadow-lg rounded-xl border border-gray-200 flex flex-col h-[350px]">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-800">Maintenance Due Forecast</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-grow">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={maintenanceData} margin={{ top: 20, right: 20, left: -10, bottom: 5 }}>
-                <XAxis dataKey="name" stroke="#6b7280" fontSize={12} />
-                <YAxis stroke="#6b7280" fontSize={12} />
-                <Tooltip />
-                <Legend wrapperStyle={{fontSize: "14px"}} />
-                <Bar dataKey="downtime" name="Estimated Downtime (Hours)" fill="#3B82F6" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <div className="defaultdashboard-card">
+          <h3 className="defaultdashboard-title">Maintenance Due Forecast</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={maintenanceData}>
+              <XAxis dataKey="name" stroke="#6b7280" />
+              <YAxis stroke="#6b7280" />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="downtime" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
 
-        {/* Top 5 Components by High Failure Rate */}
-        <Card className="lg:col-span-2 shadow-lg rounded-xl border border-gray-200 flex flex-col h-[350px]">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-800">Top 5 Components by High Failure Rate</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-grow">
-             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={failureData} layout="vertical" margin={{ top: 20, right: 20, left: 30, bottom: 5 }}>
-                <XAxis type="number" hide />
-                <YAxis type="category" dataKey="name" stroke="#6b7280" fontSize={12} width={100} />
-                <Tooltip />
-                <Bar dataKey="rate" name="Failure Rate" fill="#EF4444" radius={[0, 4, 4, 0]} barSize={20} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        {/* Failure Rate */}
+        <div className="defaultdashboard-card">
+          <h3 className="defaultdashboard-title">Top Components by Failure Rate</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={failureData} layout="vertical">
+              <XAxis type="number" hide />
+              <YAxis type="category" dataKey="name" width={100} />
+              <Tooltip />
+              <Bar dataKey="rate" fill="#EF4444" radius={[0, 4, 4, 0]} barSize={20} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
 
-        {/* Mandatory Compliance Status */}
-        <Card className="lg:col-span-2 shadow-lg rounded-xl border border-gray-200 flex flex-col h-[350px]">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-800">Mandatory Compliance Status</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-grow">
-            <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
-                    <Pie data={complianceData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={100} paddingAngle={5}>
-                        {complianceData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={complianceColors[index % complianceColors.length]} />
-                        ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend wrapperStyle={{fontSize: "14px"}} />
-                </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-        
-        {/* Top 10 Open Deferred Defects List */}
-        <Card className="lg:col-span-2 shadow-lg rounded-xl border border-gray-200 flex flex-col h-[350px]">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-800">Top 10 Open Deferred Defects List</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-grow overflow-y-auto">
-             <table className="w-full text-sm text-left text-gray-600">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0">
-                    <tr>
-                        <th scope="col" className="px-4 py-3">Aircraft Reg</th>
-                        <th scope="col" className="px-4 py-3">Description</th>
-                        <th scope="col" className="px-4 py-3">Days Open</th>
-                        <th scope="col" className="px-4 py-3">Category</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {defectsData.map((defect, index) => (
-                        <tr key={index} className="border-b hover:bg-gray-50">
-                            <td className="px-4 py-3 font-medium">{defect.reg}</td>
-                            <td className="px-4 py-3">{defect.desc}</td>
-                            <td className="px-4 py-3">{defect.days}</td>
-                            <td className="px-4 py-3">{defect.cat}</td>
-                        </tr>
-                    ))}
-                </tbody>
-             </table>
-          </CardContent>
-        </Card>
-        
-        {/* Fleet Airworthy % */}
-        <Card className="text-center shadow-lg rounded-xl border border-gray-200">
-          <CardHeader>
-            <CardTitle className="text-md font-medium text-gray-600">Fleet Airworthy %</CardTitle>
-          </CardHeader>
-          <CardContent className="relative h-[150px]">
-             <ResponsiveContainer width="100%" height="100%">
-                 <RadialBarChart 
-                    cx="50%" cy="70%" innerRadius="80%" outerRadius="100%" 
-                    barSize={15} data={airworthyData} startAngle={180} endAngle={0}>
-                    <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-                    <RadialBar background clockWise dataKey="value" fill="#22C55E" cornerRadius={10} />
-                  </RadialBarChart>
-             </ResponsiveContainer>
-             <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-gray-800">98.5%</p>
-          </CardContent>
-        </Card>
+        {/* Compliance Status */}
+        <div className="defaultdashboard-card">
+          <h3 className="defaultdashboard-title">Mandatory Compliance Status</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie data={complianceData} dataKey="value" nameKey="name" innerRadius={70} outerRadius={100} paddingAngle={5}>
+                {complianceData.map((entry, index) => (
+                  <Cell key={index} fill={complianceColors[index % complianceColors.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
 
-        {/* Aircraft On Ground */}
-        <Card className="text-center shadow-lg rounded-xl border border-gray-200">
-          <CardHeader>
-            <CardTitle className="text-md font-medium text-gray-600">Aircraft On Ground (AOG)</CardTitle>
-          </CardHeader>
-          <CardContent className="relative h-[150px]">
-            <ResponsiveContainer width="100%" height="100%">
-                 <RadialBarChart 
-                    cx="50%" cy="70%" innerRadius="80%" outerRadius="100%" 
-                    barSize={15} data={aogData} startAngle={180} endAngle={0}>
-                    <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-                    <RadialBar background clockWise dataKey="value" fill="#EF4444" cornerRadius={10} />
-                  </RadialBarChart>
-             </ResponsiveContainer>
-            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-red-600">2+</p>
-          </CardContent>
-        </Card>
+        {/* Defects Table */}
+        <div className="defaultdashboard-card">
+          <h3 className="defaultdashboard-title">Top Open Deferred Defects</h3>
+          <table className="defaultdashboard-table">
+            <thead>
+              <tr>
+                <th>Aircraft Reg</th>
+                <th>Description</th>
+                <th>Days Open</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {defectsData.map((d, i) => (
+                <tr key={i}>
+                  <td>{d.reg}</td>
+                  <td>{d.desc}</td>
+                  <td>{d.days}</td>
+                  <td>{d.cat}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        {/* Open Deferred Defects */}
-        <Card className="text-center shadow-lg rounded-xl border border-gray-200">
-          <CardHeader>
-            <CardTitle className="text-md font-medium text-gray-600">Open Deferred Defects (DD)</CardTitle>
-          </CardHeader>
-          <CardContent className="relative h-[150px]">
-            <ResponsiveContainer width="100%" height="100%">
-                 <RadialBarChart 
-                    cx="50%" cy="70%" innerRadius="80%" outerRadius="100%" 
-                    barSize={15} data={defectsGaugeData} startAngle={180} endAngle={0}>
-                    <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-                    <RadialBar background clockWise dataKey="value" fill="#F97316" cornerRadius={10} />
-                  </RadialBarChart>
-             </ResponsiveContainer>
-            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-orange-500">45+</p>
-          </CardContent>
-        </Card>
+        {/* KPI Mini Cards */}
+        <div className="defaultdashboard-mini-card">
+          <h4>Fleet Airworthy %</h4>
+          <ResponsiveContainer width="100%" height={120}>
+            <RadialBarChart cx="50%" cy="70%" innerRadius="80%" outerRadius="100%" barSize={15} data={airworthyData} startAngle={180} endAngle={0}>
+              <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
+              <RadialBar background clockWise dataKey="value" fill="#22C55E" />
+            </RadialBarChart>
+          </ResponsiveContainer>
+          <p className="defaultdashboard-kpi">98.5%</p>
+        </div>
 
-        {/* Major Check Deadline */}
-        <Card className="text-center shadow-lg rounded-xl border border-gray-200">
-          <CardHeader>
-            <CardTitle className="text-md font-medium text-gray-600">Major Check Deadline (30 Days)</CardTitle>
-          </CardHeader>
-          <CardContent className="relative h-[150px]">
-            <ResponsiveContainer width="100%" height="100%">
-                 <RadialBarChart 
-                    cx="50%" cy="70%" innerRadius="80%" outerRadius="100%" 
-                    barSize={15} data={checksData} startAngle={180} endAngle={0}>
-                    <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-                    <RadialBar background clockWise dataKey="value" fill="#3B82F6" cornerRadius={10} />
-                  </RadialBarChart>
-             </ResponsiveContainer>
-            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-blue-600">3</p>
-          </CardContent>
-        </Card>
+        <div className="defaultdashboard-mini-card">
+          <h4>Aircraft On Ground (AOG)</h4>
+          <ResponsiveContainer width="100%" height={120}>
+            <RadialBarChart cx="50%" cy="70%" innerRadius="80%" outerRadius="100%" barSize={15} data={aogData} startAngle={180} endAngle={0}>
+              <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
+              <RadialBar background clockWise dataKey="value" fill="#EF4444" />
+            </RadialBarChart>
+          </ResponsiveContainer>
+          <p className="defaultdashboard-kpi text-red-600">2+</p>
+        </div>
 
+        <div className="defaultdashboard-mini-card">
+          <h4>Open Deferred Defects</h4>
+          <ResponsiveContainer width="100%" height={120}>
+            <RadialBarChart cx="50%" cy="70%" innerRadius="80%" outerRadius="100%" barSize={15} data={defectsGaugeData} startAngle={180} endAngle={0}>
+              <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
+              <RadialBar background clockWise dataKey="value" fill="#F97316" />
+            </RadialBarChart>
+          </ResponsiveContainer>
+          <p className="defaultdashboard-kpi text-orange-500">45+</p>
+        </div>
+
+        <div className="defaultdashboard-mini-card">
+          <h4>Major Check Deadline</h4>
+          <ResponsiveContainer width="100%" height={120}>
+            <RadialBarChart cx="50%" cy="70%" innerRadius="80%" outerRadius="100%" barSize={15} data={checksData} startAngle={180} endAngle={0}>
+              <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
+              <RadialBar background clockWise dataKey="value" fill="#3B82F6" />
+            </RadialBarChart>
+          </ResponsiveContainer>
+          <p className="defaultdashboard-kpi text-blue-600">3</p>
+        </div>
       </div>
     </div>
   );

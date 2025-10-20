@@ -1,24 +1,24 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
-import "../assets/style.css"; // Make sure the file exists
+import "../assets/style.css";
 
 const Topbar = () => {
   return (
-    <header className="topbar-wrapper">
-      {/* Left Placeholder (if needed for spacing balance) */}
-      <div className="topbar-left-space"></div>
+    <header className="topbar">
+      {/* Left Spacer for layout balance */}
+      <div className="topbar-left"></div>
 
-      {/* Center Title */}
+      {/* Centered Title */}
       <div className="topbar-center">
         <div className="topbar-title">CAMO SOFTWARE</div>
       </div>
 
-      {/* Right Search Input */}
+      {/* Search box on right */}
       <div className="topbar-search">
         <FaSearch className="search-icon" />
         <input
           type="text"
-          placeholder="Flight number"
+          placeholder="Search flight number..."
           className="search-input"
         />
       </div>

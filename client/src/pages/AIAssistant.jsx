@@ -1,15 +1,39 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Send, SquareDashed } from "lucide-react";
+import "../assets/style.css";
 
 const AIAssistant = () => {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState(() => {
+    const saved = localStorage.getItem("ai_chat_messages");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [input, setInput] = useState(() => {
+    return localStorage.getItem("ai_chat_input") || "";
+  });
+
   const [loading, setLoading] = useState(false);
   const [controller, setController] = useState(null);
   const chatEndRef = useRef(null);
 
+  // 🔹 Auto-scroll to bottom when new messages come in
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // 🔹 Persist chat messages
+  useEffect(() => {
+    localStorage.setItem("ai_chat_messages", JSON.stringify(messages));
+  }, [messages]);
+
+  // 🔹 Persist current input
+  useEffect(() => {
+    localStorage.setItem("ai_chat_input", input);
+  }, [input]);
+
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
+
     const newMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, newMessage]);
     setInput("");
@@ -30,11 +54,8 @@ const AIAssistant = () => {
       const aiMessage = { sender: "ai", text: data.response || "(No response)" };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (err) {
-      if (err.name === "AbortError") {
-        console.log("Generation stopped by user.");
-      } else {
-        console.error("Error:", err);
-      }
+      if (err.name === "AbortError") console.log("Stopped by user.");
+      else console.error("Error:", err);
     } finally {
       setLoading(false);
       setController(null);
@@ -50,60 +71,40 @@ const AIAssistant = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      {/* Chat Area */}
-      <div
-        className="flex-1 overflow-y-auto p-6 space-y-4"
-        style={{
-          marginTop: "90px", // 👈 Adjust this value if your Topbar is taller
-        }}
-      >
+    <div className="aiassistant-container">
+      <div className="aiassistant-chat">
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`flex ${
-              msg.sender === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={msg.sender === "user" ? "user-msg" : "ai-msg"}
           >
-            <div
-              className={`max-w-[70%] px-4 py-2 rounded-2xl ${
-                msg.sender === "user"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-800 shadow"
-              }`}
-            >
-              {msg.text}
-            </div>
+            {msg.text}
           </div>
         ))}
         <div ref={chatEndRef} />
       </div>
 
-      {/* Floating Input Bar */}
-      <div className="flex justify-center mb-6">
-        <div className="flex items-center bg-white w-2/3 shadow-lg rounded-full p-2">
+      <div className="aiassistant-input-container">
+        <div className="aiassistant-inputbar">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            placeholder="Ask something..."
-            className="flex-1 outline-none px-4 py-2 rounded-full"
+            onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}
+            placeholder={loading ? "Generating response..." : "Ask something..."}
+            disabled={loading}
           />
-
           {loading ? (
-            <button
-              onClick={stopGeneration}
-              className="bg-red-500 hover:bg-red-600 text-white p-3 rounded-full transition"
-            >
-              <Square size={18} />
+            <button onClick={stopGeneration} className="stop">
+              <SquareDashed />
             </button>
           ) : (
             <button
               onClick={sendMessage}
-              className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full transition"
+              className="send"
+              disabled={!input.trim()}
             >
-              <Send size={18} />
+              <Send />
             </button>
           )}
         </div>
