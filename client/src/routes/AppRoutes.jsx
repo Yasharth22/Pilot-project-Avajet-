@@ -19,6 +19,7 @@ import Layout from '../components/Layout';
 import AIAssistant from '../pages/AIAssistant';
 import Settings from '../components/Settings';
 import Support from '../components/Support';
+import Forum from '../pages/Forum';
 
 const AppRoutes = () => {
   return (
@@ -166,6 +167,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <Support />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/forum"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Forum />
             </Layout>
           </ProtectedRoute>
         }

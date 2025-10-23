@@ -1,233 +1,359 @@
-import React from "react";
-import { Search, Filter, Download, ChevronDown } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import "../assets/style.css";
+import { Search, Filter, Download, ChevronDown, Bell } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-const roles = [
-  { name: "Design Head", new: 18, screening: 28, interview: 3, test: "—", hired: "—" },
-  { name: "Art Lead", new: 5, screening: 12, interview: 2, test: "—", hired: "—" },
-  { name: "Product Designer", new: 10, screening: 15, interview: 4, test: "—", hired: "—" },
-  { name: "Junior UI Designer", new: 9, screening: 6, interview: 1, test: "—", hired: "—" },
-  { name: "3D Artist", new: 7, screening: 3, interview: "—", test: "—", hired: "—" },
-  { name: "UX Researcher", new: 4, screening: 8, interview: 2, test: "—", hired: "—" },
-];
+/* ✈️ Aviation Department-wise Role Data */
+const departmentRoles = {
+  CAMO: [
+    { name: "CAMO Manager", new: 3, screening: 2, interview: 1, test: "—", hired: "—" },
+    { name: "Airworthiness Engineer", new: 4, screening: 3, interview: 1, test: "—", hired: "—" },
+    { name: "Records Specialist", new: 2, screening: 1, interview: "—", test: "—", hired: "—" },
+  ],
+  MANAGERS: [
+    { name: "Accountable Manager", new: 2, screening: 1, interview: 1, test: "—", hired: "—" },
+    { name: "Operations Manager", new: 3, screening: 2, interview: 1, test: "—", hired: "—" },
+    { name: "Safety Manager", new: 2, screening: 2, interview: 1, test: "—", hired: "—" },
+  ],
+  FINANCE: [
+    { name: "Financial Analyst", new: 4, screening: 2, interview: 1, test: "—", hired: "—" },
+    { name: "Budget Controller", new: 3, screening: 2, interview: 1, test: "—", hired: "—" },
+    { name: "Asset Accountant", new: 2, screening: 1, interview: 1, test: "—", hired: "—" },
+  ],
+  PILOTS: [
+    { name: "Captain", new: 6, screening: 3, interview: 2, test: "—", hired: "—" },
+    { name: "First Officer", new: 5, screening: 3, interview: 1, test: "—", hired: "—" },
+    { name: "Trainee Pilot", new: 4, screening: 2, interview: 1, test: "—", hired: "—" },
+  ],
+  "ON GROUND CREW": [
+    { name: "Ground Crew Supervisor", new: 5, screening: 2, interview: 1, test: "—", hired: "—" },
+    { name: "Aircraft Technician", new: 4, screening: 3, interview: 1, test: "—", hired: "—" },
+    { name: "Ramp Officer", new: 6, screening: 2, interview: 1, test: "—", hired: "—" },
+  ],
+  "ASSET MANAGEMENT": [
+    { name: "Maintenance Engineer", new: 3, screening: 2, interview: 1, test: "—", hired: "—" },
+    { name: "Fleet Planner", new: 2, screening: 1, interview: "—", test: "—", hired: "—" },
+    { name: "Parts Procurement Officer", new: 3, screening: 1, interview: 1, test: "—", hired: "—" },
+  ],
+};
 
+/* Tasks */
 const tasks = [
-  { time: "09:00 — 10:00 AM", title: "Interview with product designer candidates", color: "border-pink-500" },
-  { time: "11:00 — 12:00 PM", title: "Project sync with Design Team", color: "border-green-500" },
-  { time: "01:00 — 02:00 PM", title: "Prepare new hiring plan", color: "border-yellow-500" },
-  { time: "03:00 — 04:00 PM", title: "One-on-one with interns", color: "border-blue-500" },
-  { time: "05:00 — 06:00 PM", title: "UX feedback review", color: "border-purple-500" },
+  { time: "09:00 — 10:00 AM", title: "Pilot interview sessions", color: "accent-pink" },
+  { time: "11:00 — 12:00 PM", title: "Fleet maintenance sync", color: "accent-green" },
+  { time: "01:00 — 02:00 PM", title: "Budget review meeting", color: "accent-yellow" },
+  { time: "03:00 — 04:00 PM", title: "Crew training schedule update", color: "accent-blue" },
+  { time: "05:00 — 06:00 PM", title: "CAMO compliance report prep", color: "accent-purple" },
 ];
 
+/* Teams */
 const teams = [
-  { name: "Design Team", count: 24 },
-  { name: "Development Team", count: 16 },
-  { name: "Finance Team", count: 10 },
-  { name: "Sales Team", count: 27 },
+  { name: "Flight Operations", count: 12 },
+  { name: "CAMO Department", count: 8 },
+  { name: "Ground Crew", count: 15 },
+  { name: "Finance", count: 10 },
 ];
 
-const pillColors = [
-  "bg-pink-100 text-pink-600",
-  "bg-yellow-100 text-yellow-600",
-  "bg-blue-100 text-blue-600",
-  "bg-green-100 text-green-600",
-  "bg-purple-100 text-purple-600",
-  "bg-teal-100 text-teal-600",
-];
+/* Pill colors for table values */
+const pillColors = ["pill-pink", "pill-yellow", "pill-blue", "pill-green", "pill-purple", "pill-teal"];
+
+/* Detect outside clicks for dropdowns */
+const useOutsideClick = (ref, handler) => {
+  useEffect(() => {
+    const fn = (e) => {
+      if (!ref.current || ref.current.contains(e.target)) return;
+      handler();
+    };
+    document.addEventListener("mousedown", fn);
+    return () => document.removeEventListener("mousedown", fn);
+  }, [ref, handler]);
+};
 
 const MyActions = () => {
-  const btnBase = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200";
-  const btnPrimary = `${btnBase} bg-indigo-500 text-white hover:bg-indigo-600`;
-  const btnSecondary = `${btnBase} border border-gray-300 bg-white hover:bg-gray-100`;
-  const btnSuccess = `${btnBase} bg-green-500 text-white hover:bg-green-600`;
+  const [selectedDept, setSelectedDept] = useState("CAMO");
+  const [deptMenuOpen, setDeptMenuOpen] = useState(false);
+  const deptRef = useRef(null);
+  useOutsideClick(deptRef, () => setDeptMenuOpen(false));
+
+  const [dateMenuOpen, setDateMenuOpen] = useState(false);
+  const [periodMenuOpen, setPeriodMenuOpen] = useState(false);
+  const [dateRange, setDateRange] = useState("Feb 18 — Nov 18");
+  const [period, setPeriod] = useState("Monthly");
+  const [search, setSearch] = useState("");
+
+  const dateRef = useRef(null);
+  const periodRef = useRef(null);
+  useOutsideClick(dateRef, () => setDateMenuOpen(false));
+  useOutsideClick(periodRef, () => setPeriodMenuOpen(false));
+
+  const topBtnClass = "ma-top-btn";
+
+  /* Donut Chart Job Summary Data */
+  const jobData = [
+    { name: "Published", value: 80, color: "#2563eb" }, // Blue
+    { name: "On Hold", value: 20, color: "#f59e0b" },  // Amber
+    { name: "Internal", value: 18, color: "#10b981" }, // Green
+    { name: "Closed", value: 15, color: "#ef4444" },   // Red
+  ];
+
+  const roles = departmentRoles[selectedDept];
 
   return (
-    <div className="p-6 bg-gradient-to-b from-gray-50 to-white min-h-screen w-full font-inter text-gray-800">
-      {/* ================= Top Bar ================= */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 bg-white p-4 rounded-2xl shadow-sm">
-        {/* Left - Heading */}
+    <div className="myactions-container">
+      {/* Topbar */}
+      <div className="myactions-topbar">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-          <p className="text-sm text-gray-500">Today is Monday, 8th November 2025</p>
+          <h1 className="ma-title">My Actions</h1>
+          <p className="ma-sub">Good Morning, Dhairyash 👋</p>
         </div>
 
-        {/* Right - Search and Filters */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="relative flex items-center w-full sm:w-auto">
-            <Search className="absolute left-3 text-gray-400 w-4 h-4" />
+        <div className="ma-controls">
+          {/* Search */}
+          <div className="ma-search">
+            <Search className="ma-search-icon" />
             <input
               type="text"
-              placeholder="Search"
-              className="pl-10 pr-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-56"
+              placeholder="Search actions..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="ma-search-input"
             />
           </div>
-          <button className={`${btnSecondary} flex items-center justify-between`}>
-            Feb 18 — Nov 18 <ChevronDown className="ml-2 w-4 h-4" />
+
+          {/* Date Dropdown */}
+          <div className="ma-dropdown-wrapper" ref={dateRef}>
+            <button
+              className={`${topBtnClass} ma-dropdown-btn`}
+              onClick={() => {
+                setDateMenuOpen((s) => !s);
+                setPeriodMenuOpen(false);
+              }}
+            >
+              <span className="ma-dropdown-label">{dateRange}</span>
+              <ChevronDown className="ma-caret" />
+            </button>
+            {dateMenuOpen && (
+              <div className="ma-dropdown-menu">
+                {["Today", "Last 7 days", "Feb 18 — Nov 18"].map((d) => (
+                  <button
+                    key={d}
+                    className="ma-dropdown-item"
+                    onClick={() => {
+                      setDateRange(d);
+                      setDateMenuOpen(false);
+                    }}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Period Dropdown */}
+          <div className="ma-dropdown-wrapper" ref={periodRef}>
+            <button
+              className={`${topBtnClass} ma-dropdown-btn`}
+              onClick={() => {
+                setPeriodMenuOpen((s) => !s);
+                setDateMenuOpen(false);
+              }}
+            >
+              <span className="ma-dropdown-label">{period}</span>
+              <ChevronDown className="ma-caret" />
+            </button>
+            {periodMenuOpen && (
+              <div className="ma-dropdown-menu">
+                {["Daily", "Weekly", "Monthly"].map((p) => (
+                  <button
+                    key={p}
+                    className="ma-dropdown-item"
+                    onClick={() => {
+                      setPeriod(p);
+                      setPeriodMenuOpen(false);
+                    }}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Buttons */}
+          <button className={`${topBtnClass} ma-filter-btn`}>
+            <Filter className="ma-icon" /> Filter
           </button>
-          <button className={`${btnSecondary} flex items-center justify-between`}>
-            Monthly <ChevronDown className="ml-2 w-4 h-4" />
+          <button className={`${topBtnClass} ma-export-btn`}>
+            <Download className="ma-icon" /> Export
           </button>
-          <button className={`${btnPrimary} flex items-center gap-2`}>
-            <Filter className="w-4 h-4" /> Filter
-          </button>
-          <button className={`${btnSuccess} flex items-center gap-2`}>
-            <Download className="w-4 h-4" /> Export
+          <button className="ma-ghost-btn" title="Notifications">
+            <Bell className="ma-icon" />
+            <span className="ma-pill-badge" />
           </button>
         </div>
       </div>
 
-      {/* ================= Content Grid ================= */}
-      <div className="flex flex-col md:flex-row gap-4">
-        {/* LEFT COLUMN */}
-        <div className="flex-1 flex flex-col gap-4">
+      {/* Main Grid */}
+      <div className="myactions-grid">
+        <div className="myactions-col">
           {/* Hiring Section */}
-          <div className="bg-white rounded-2xl shadow-md p-6 card-hover">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Hiring</h2>
-              <div className="flex items-center gap-3">
-                <button className={btnSecondary}>
-                  Design <ChevronDown className="ml-2 w-4 h-4" />
-                </button>
-                <button className="text-indigo-600 text-sm font-medium hover:underline">View All</button>
+          <div className="myactions-card">
+            <div className="card-header">
+              <h2>Hiring</h2>
+              <div className="card-actions">
+                <div className="small-dropdown" ref={deptRef}>
+                  <button
+                    className="small-dropdown-btn"
+                    onClick={() => setDeptMenuOpen((o) => !o)}
+                  >
+                    {selectedDept} <ChevronDown className="small-caret" />
+                  </button>
+                  {deptMenuOpen && (
+                    <div className="small-dropdown-menu">
+                      {Object.keys(departmentRoles).map((dept) => (
+                        <button
+                          key={dept}
+                          className="small-dropdown-item"
+                          onClick={() => {
+                            setSelectedDept(dept);
+                            setDeptMenuOpen(false);
+                          }}
+                        >
+                          {dept}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <button className="link-btn">View All</button>
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <div className="grid grid-cols-6 text-sm font-medium text-gray-500 border-b pb-2 mb-2">
-                <div>Role Name</div>
-                <div>New Applied</div>
-                <div>Screening</div>
-                <div>Interview</div>
-                <div>Test</div>
-                <div>Hired</div>
-              </div>
-              {roles.map((role, idx) => (
-                <div
-                  key={idx}
-                  className={`grid grid-cols-6 items-center text-sm text-gray-700 py-2 px-2 rounded-lg ${
-                    idx % 2 === 0 ? "bg-gray-50" : "bg-white"
-                  } hover:bg-indigo-50 transition`}
-                >
-                  <div>{role.name}</div>
-                  <div>
-                    <span className={`px-2 py-1 rounded-full text-xs ${pillColors[0]}`}>
-                      {role.new} Candidates
-                    </span>
-                  </div>
-                  <div>
-                    <span className={`px-2 py-1 rounded-full text-xs ${pillColors[1]}`}>
-                      {role.screening} Candidates
-                    </span>
-                  </div>
-                  <div>
-                    <span className={`px-2 py-1 rounded-full text-xs ${pillColors[2]}`}>
-                      {role.interview} Candidates
-                    </span>
-                  </div>
-                  <div>
-                    <span className={`px-2 py-1 rounded-full text-xs ${pillColors[3]}`}>
-                      {role.test}
-                    </span>
-                  </div>
-                  <div>
-                    <span className={`px-2 py-1 rounded-full text-xs ${pillColors[4]}`}>
-                      {role.hired}
-                    </span>
-                  </div>
+            {/* Roles Table */}
+            <div className="table-head">
+              <div>Role</div>
+              <div>New</div>
+              <div>Screening</div>
+              <div>Interview</div>
+              <div>Test</div>
+              <div>Hired</div>
+            </div>
+
+            <div className="table-body">
+              {roles.map((r, i) => (
+                <div key={i} className={`table-row ${i % 2 === 0 ? "even" : ""}`}>
+                  <div className="role-name">{r.name}</div>
+                  <div><span className={`pill ${pillColors[0]}`}>{r.new}</span></div>
+                  <div><span className={`pill ${pillColors[1]}`}>{r.screening}</span></div>
+                  <div><span className={`pill ${pillColors[2]}`}>{r.interview}</span></div>
+                  <div><span className={`pill ${pillColors[3]}`}>{r.test}</span></div>
+                  <div><span className={`pill ${pillColors[4]}`}>{r.hired}</span></div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* My Task Section */}
-          <div className="bg-white rounded-2xl shadow-md p-6 card-hover">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">My Task</h2>
-              <div className="flex items-center gap-3">
-                <button className={btnSecondary}>
-                  Today <ChevronDown className="ml-2 w-4 h-4" />
-                </button>
-                <button className={btnSecondary}>
-                  Feb 18 — Nov 18 <ChevronDown className="ml-2 w-4 h-4" />
-                </button>
-                <button className={btnPrimary}>Add Task</button>
+          {/* My Tasks */}
+          <div className="myactions-card">
+            <div className="card-header">
+              <h2>My Tasks</h2>
+              <div className="card-actions">
+                <div className="small-dropdown">
+                  <button className="small-dropdown-btn">
+                    Today <ChevronDown className="small-caret" />
+                  </button>
+                </div>
+                <button className="primary-sm">Add Task</button>
               </div>
             </div>
-            <div className="flex flex-col divide-y divide-gray-200">
-              {tasks.map((task, idx) => (
-                <div
-                  key={idx}
-                  className={`flex flex-col pl-3 py-3 border-l-4 ${task.color}`}
-                >
-                  <p className="text-xs text-gray-500">{task.time}</p>
-                  <p className="text-sm font-medium text-gray-800">{task.title}</p>
+
+            <div className="task-list">
+              {tasks.map((t, i) => (
+                <div key={i} className="task-row">
+                  <div className={`task-accent ${t.color}`} />
+                  <div className="task-meta">
+                    <div className="task-time">{t.time}</div>
+                    <div className="task-title">{t.title}</div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="flex-1 flex flex-col gap-4">
-          {/* Jobs Summary Section */}
-          <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center card-hover">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Jobs Summary</h2>
-            <div className="w-40 h-40 bg-gray-100 rounded-full mb-4 flex items-center justify-center">
-              <span className="text-gray-400 text-sm">Chart</span>
+        {/* Right Column */}
+        <div className="myactions-col">
+          {/* Jobs Summary with Donut Chart */}
+          <div className="myactions-card center-col">
+            <h2>Jobs Summary</h2>
+            <div className="jobs-chart-wrapper">
+              <ResponsiveContainer width={180} height={180}>
+                <PieChart>
+                  <Pie
+                    dataKey="value"
+                    data={jobData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={80}
+                    paddingAngle={3}
+                    startAngle={90}
+                    endAngle={450}
+                    isAnimationActive={true}
+                    animationBegin={0}
+                    animationDuration={1500}
+                    animationEasing="ease-out"
+                  >
+                    {jobData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="jobs-center-text">
+                <div className="jobs-center-total">133</div>
+                <div className="jobs-center-label">Total Jobs</div>
+              </div>
             </div>
-            <p className="text-xl font-bold text-gray-800 mb-4">133 Total Jobs</p>
-            <div className="space-y-2 w-full">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-purple-500"></span>
-                <span className="text-sm text-gray-600">80 Published</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
-                <span className="text-sm text-gray-600">20 On Hold</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-green-500"></span>
-                <span className="text-sm text-gray-600">18 Internal</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-pink-500"></span>
-                <span className="text-sm text-gray-600">15 Closed</span>
-              </div>
+
+            {/* Legend auto-linked to chart colors */}
+            <div className="jobs-stats">
+              {jobData.map((item, idx) => (
+                <div key={idx} className="stat-row">
+                  <span
+                    className="dot"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  {item.value} {item.name}
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Employee Section */}
-          <div className="bg-white rounded-2xl shadow-md p-6 card-hover">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Employee</h2>
-              <button className="text-indigo-600 text-sm font-medium hover:underline">
-                View All
-              </button>
+          {/* Teams */}
+          <div className="myactions-card">
+            <div className="card-header">
+              <h2>Teams</h2>
+              <div className="card-actions">
+                <button className="link-btn">View All</button>
+              </div>
             </div>
-            <div className="flex flex-col divide-y divide-gray-200">
+
+            <div className="teams-list">
               {teams.map((team, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between py-3 hover:bg-gray-50 rounded-lg px-2 transition"
-                >
-                  <div className="text-gray-800 font-medium text-sm">{team.name}</div>
-                  <div className="flex -space-x-2">
-                    <img
-                      className="w-8 h-8 rounded-full border-2 border-white"
-                      src={`https://i.pravatar.cc/150?img=${idx * 3 + 1}`}
-                      alt="avatar"
-                    />
-                    <img
-                      className="w-8 h-8 rounded-full border-2 border-white"
-                      src={`https://i.pravatar.cc/150?img=${idx * 3 + 2}`}
-                      alt="avatar"
-                    />
-                    <img
-                      className="w-8 h-8 rounded-full border-2 border-white"
-                      src={`https://i.pravatar.cc/150?img=${idx * 3 + 3}`}
-                      alt="avatar"
-                    />
+                <div key={idx} className="team-row">
+                  <div className="team-left">
+                    <div className="team-name">{team.name}</div>
                   </div>
-                  <div className="text-gray-500 text-sm font-medium">+{team.count}</div>
+                  <div className="team-right">
+                    <div className="avatars">
+                      <img src={`https://i.pravatar.cc/150?img=${idx * 3 + 1}`} alt="" />
+                      <img src={`https://i.pravatar.cc/150?img=${idx * 3 + 2}`} alt="" />
+                      <img src={`https://i.pravatar.cc/150?img=${idx * 3 + 3}`} alt="" />
+                    </div>
+                    <div className="team-count">+{team.count}</div>
+                  </div>
                 </div>
               ))}
             </div>
