@@ -2526,6 +2526,7 @@ body {
 .avatars img { width: 32px; height: 32px; border-radius: 999px; border: 2px solid #fff; margin-left: -8px; object-fit:cover; }
 .team-count { color:#64748b; font-weight:700; }
 
+
 /* small primary button */
 .primary-sm { background: linear-gradient(135deg,#2563eb,#1e49d4); color:white; padding:8px 12px; border-radius:10px; border:none; font-weight:700; }
 
@@ -2536,9 +2537,6 @@ body {
   .myactions-grid { gap: 12px; }
   .teams-list .avatars img { width:28px; height:28px; margin-left:-6px; }
 }
-
-
-
 
 /* =========================================================
    🔹 AI ASSISTANT GLOBAL STYLES (CHAT + INPUT + BUBBLES)

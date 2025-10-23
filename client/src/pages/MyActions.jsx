@@ -99,7 +99,7 @@ const MyActions = () => {
   const roles = departmentRoles[selectedDept];
 
   return (
-    <div className="myactions-container">
+    <div className="myactions-container ">
       {/* Topbar */}
       <div className="myactions-topbar">
         <div>

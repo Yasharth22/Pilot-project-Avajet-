@@ -6,6 +6,7 @@ const Settings = () => {
     theme: "light",
     fontSize: 16,
     layout: "compact",
+    dateFormat: "12h",
     aiTypingSpeed: 2,
     aiTypingDots: true,
     aiSaveHistory: true,
@@ -16,7 +17,12 @@ const Settings = () => {
 
   const [settings, setSettings] = useState(() => {
     const saved = localStorage.getItem("userSettings");
-    return saved ? JSON.parse(saved) : defaultSettings;
+    if (!saved) return defaultSettings;
+    try {
+      return { ...defaultSettings, ...JSON.parse(saved) };
+    } catch {
+      return defaultSettings;
+    }
   });
 
   const [activeTab, setActiveTab] = useState("General");
@@ -26,12 +32,12 @@ const Settings = () => {
     localStorage.setItem("userSettings", JSON.stringify(settings));
   }, [settings]);
 
-  // Apply live preview
+  // Apply Settings UI theme and font size
   useEffect(() => {
     document.body.style.backgroundColor =
-      settings.theme === "dark" ? "#1f2937" : "#f5f5f5";
+      settings.theme === "dark" ? "#ffe8e2" : "#f9fafb"; // Brand dark mode background
     document.body.style.color =
-      settings.theme === "dark" ? "#f9fafb" : "#111827";
+      settings.theme === "dark" ? "#7f1d1d" : "#111827"; // Brand dark text
     document.documentElement.style.fontSize = `${settings.fontSize}px`;
   }, [settings.theme, settings.fontSize]);
 
@@ -50,15 +56,16 @@ const Settings = () => {
         return (
           <div className="settings-content">
             <div className="settings-card">
-              <h3>Appearance</h3>
+              <h3>Appearance & Layout</h3>
+
               <div className="settings-row">
-                <label>Theme</label>
+                <label>Theme (UI Only)</label>
                 <select
                   value={settings.theme}
                   onChange={(e) => handleChange("theme", e.target.value)}
                 >
                   <option value="light">Light</option>
-                  <option value="dark">Dark</option>
+                  <option value="dark">Dark (Brand Red)</option>
                 </select>
               </div>
 
@@ -84,6 +91,17 @@ const Settings = () => {
                 >
                   <option value="compact">Compact</option>
                   <option value="spacious">Spacious</option>
+                </select>
+              </div>
+
+              <div className="settings-row">
+                <label>Date/Time Format</label>
+                <select
+                  value={settings.dateFormat}
+                  onChange={(e) => handleChange("dateFormat", e.target.value)}
+                >
+                  <option value="12h">12-Hour</option>
+                  <option value="24h">24-Hour</option>
                 </select>
               </div>
             </div>
@@ -138,20 +156,145 @@ const Settings = () => {
         return (
           <div className="settings-content">
             <div className="settings-card">
-              <h3>Account Details</h3>
-              <div className="settings-row">
-                <label>User ID</label>
-                <span>684c14fbeb291877924267ec</span>
+              <h3>Account Settings</h3>
+
+              {/* User Details */}
+              <div className="settings-section">
+                <h4>User Details</h4>
+                <div className="settings-row">
+                  <label>Full Name</label>
+                  <input
+                    type="text"
+                    value={settings.fullName || "Dhairyash Aswani"}
+                    disabled
+                  />
+                </div>
+                <div className="settings-row">
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    value={settings.email || "dhairyash@a14tech.com"}
+                    disabled
+                  />
+                </div>
+                <div className="settings-row">
+                  <label>Role</label>
+                  <input
+                    type="text"
+                    value={settings.role || "Admin"}
+                    disabled
+                  />
+                </div>
               </div>
-              <div className="settings-row">
-                <label>Role</label>
-                <span>Admin</span>
+
+              {/* Password Section */}
+              <div className="settings-section">
+                <h4>Password</h4>
+                {settings.passwordChanged ? (
+                  <p className="info-text">
+                    Password has been changed. To change again, contact admin to
+                    reset it to default.
+                  </p>
+                ) : (
+                  <>
+                    <div className="settings-row">
+                      <label>Current Password</label>
+                      <input
+                        type="password"
+                        value={settings.currentPassword || ""}
+                        onChange={(e) =>
+                          setSettings((prev) => ({
+                            ...prev,
+                            currentPassword: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="settings-row">
+                      <label>New Password</label>
+                      <input
+                        type="password"
+                        value={settings.newPassword || ""}
+                        onChange={(e) =>
+                          setSettings((prev) => ({
+                            ...prev,
+                            newPassword: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="settings-row">
+                      <label>Confirm Password</label>
+                      <input
+                        type="password"
+                        value={settings.confirmPassword || ""}
+                        onChange={(e) =>
+                          setSettings((prev) => ({
+                            ...prev,
+                            confirmPassword: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <button
+                      className="primary-sm"
+                      onClick={() => {
+                        if (
+                          settings.currentPassword !== "tempPassword123!" ||
+                          settings.newPassword !== settings.confirmPassword
+                        ) {
+                          alert(
+                            "Either current password is incorrect or new passwords do not match!"
+                          );
+                          return;
+                        }
+                        setSettings((prev) => ({
+                          ...prev,
+                          passwordChanged: true,
+                          currentPassword: "",
+                          newPassword: "",
+                          confirmPassword: "",
+                        }));
+                        alert(
+                          "Password changed successfully. Notify admin if you want to reset it again."
+                        );
+                      }}
+                    >
+                      Change Password
+                    </button>
+                  </>
+                )}
               </div>
-              <div className="settings-row">
-                <label>Change Password</label>
-                <input type="password" disabled value="********" />
+
+              {/* Two-Factor Authentication (Optional) */}
+              <div className="settings-section">
+                <h4>Security</h4>
+                <div className="settings-row">
+                  <label>Two-Factor Authentication</label>
+                  <input
+                    type="checkbox"
+                    checked={settings.twoFA || false}
+                    onChange={(e) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        twoFA: e.target.checked,
+                      }))
+                    }
+                  />
+                </div>
               </div>
-              <button className="logout-btn">Logout</button>
+
+              {/* Logout */}
+              <div className="settings-section">
+                <button
+                  className="logout-btn"
+                  onClick={() => {
+                    alert("Logged out!");
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -188,9 +331,7 @@ const Settings = () => {
                 <input
                   type="checkbox"
                   checked={settings.aiAlerts}
-                  onChange={(e) =>
-                    handleChange("aiAlerts", e.target.checked)
-                  }
+                  onChange={(e) => handleChange("aiAlerts", e.target.checked)}
                 />
               </div>
             </div>
@@ -208,9 +349,7 @@ const Settings = () => {
         {["General", "AI Assistant", "Account", "Notifications"].map((tab) => (
           <button
             key={tab}
-            className={`settings-tab ${
-              activeTab === tab ? "active" : ""
-            }`}
+            className={`settings-tab ${activeTab === tab ? "active" : ""}`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
