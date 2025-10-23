@@ -17,6 +17,8 @@ import MyActions from '../pages/MyActions';
 import ProtectedRoute from './ProtectedRoute';
 import Layout from '../components/Layout';
 import AIAssistant from '../pages/AIAssistant';
+import Settings from '../components/Settings';
+import Support from '../components/Support';
 
 const AppRoutes = () => {
   return (
@@ -142,6 +144,28 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <MyActions />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Settings />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/support"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Support />
             </Layout>
           </ProtectedRoute>
         }
