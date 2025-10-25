@@ -122,7 +122,7 @@ const Support = () => {
             ) : activeModal === "Contact Support" ? (
               <>
                 <p>
-                  You can reach us at <b>support@aerosys.com</b> or call <b>+1-800-AERO-HELP</b>.
+                  You can reach us at <b>support@avajet.in</b> or call <b>+91-800-AERO-HELP</b>.
                 </p>
                 <button
                   className="support-modal-close"

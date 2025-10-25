@@ -2541,6 +2541,9 @@ body {
 /* =========================================================
    🔹 AI ASSISTANT GLOBAL STYLES (CHAT + INPUT + BUBBLES)
    ========================================================= */
+/* =========================================================
+   🔹 AI ASSISTANT GLOBAL STYLES (CHAT + INPUT + BUBBLES)
+   ========================================================= */
 
 .aiassistant-container {
   display: flex;
@@ -2557,7 +2560,7 @@ body {
   margin-top: 90px; /* leave space for topbar */
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 /* Scrollbar styling */
@@ -2573,10 +2576,11 @@ body {
 .ai-msg,
 .user-msg {
   max-width: 75%;
-  padding: 0.75rem 1rem;
-  border-radius: 1.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 20px;
   font-size: 0.95rem;
-  line-height: 1.4;
+  line-height: 1.3;
+  position: relative;
   animation: fadeInUp 0.25s ease both;
 }
 
@@ -2593,16 +2597,23 @@ body {
   align-self: flex-start;
 }
 
+.ai-msg.highlight {
+  border: 2px solid #3b82f6;
+  background-color: #f0f7ff;
+}
+
+/* Message time */
+.msg-time {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+  text-align: right;
+}
+
 /* Smooth fade-in animation */
 @keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Typing indicator */
@@ -2611,8 +2622,8 @@ body {
   gap: 0.4rem;
   align-items: center;
   background: white;
-  border-radius: 1.5rem;
-  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  padding: 0.5rem 0.8rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   width: fit-content;
   max-width: 75%;
@@ -2626,30 +2637,20 @@ body {
   animation: bounce 1.4s infinite ease-in-out both;
 }
 
-.typing-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes bounce {
-  0%, 80%, 100% {
-    transform: scale(0);
-    opacity: 0.3;
-  }
-  40% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+  40% { transform: scale(1); opacity: 1; }
 }
 
-/* ===== Input Bar (ChatGPT-like design) ===== */
-
+/* ===== Input Bar (Centered ChatGPT-style) ===== */
 .aiassistant-input-container {
   display: flex;
-  justify-content: center;
-  padding: 1rem 1rem 1.5rem 1rem;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
 }
 
 .aiassistant-inputbar {
@@ -2704,54 +2705,131 @@ body {
   height: 18px;
 }
 
-/* Send / Stop Buttons */
 .aiassistant-inputbar button.send {
   background-color: #3b82f6;
   color: white;
 }
-
-.aiassistant-inputbar button.send:hover {
-  background-color: #2563eb;
-}
-
-.aiassistant-inputbar button.send:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.aiassistant-inputbar button.send:hover { background-color: #2563eb; }
+.aiassistant-inputbar button.send:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .aiassistant-inputbar button.stop {
   background-color: #ef4444;
   color: white;
 }
+.aiassistant-inputbar button.stop:hover { background-color: #dc2626; }
 
-.aiassistant-inputbar button.stop:hover {
-  background-color: #dc2626;
+/* ===== Quick Replies ===== */
+.quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  justify-content: center;
 }
 
-/* Mobile adjustments */
-@media (max-width: 768px) {
-  .aiassistant-inputbar {
-    max-width: 95%;
-  }
+.quick-replies button {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
 
-  .ai-msg,
-  .user-msg {
-    max-width: 85%;
-    font-size: 0.9rem;
-  }
+.quick-replies button:hover {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* ===== Auto-Suggestions Dropdown ===== */
+.auto-suggestions {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  margin-top: 0.4rem;
+  overflow: hidden;
+  position: absolute;
+  z-index: 10;
+}
+
+.suggestion-item {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.suggestion-item:hover {
+  background-color: #f3f4f6;
+}
+
+/* ===== Footer: Model + Clear buttons ===== */
+.aiassistant-footer-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.6rem;
+  max-width: 700px;
+  margin-inline: auto;
+  font-size: 0.85rem;
+  color: #6b7280;
+  gap: 1rem;
+}
+
+.footer-model {
+  font-weight: 500;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.clear-history-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: 1px solid #ef4444;
+  border-radius: 9999px;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  transition: all 0.2s ease;
+}
+
+.clear-history-btn:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+/* ===== Mobile adjustments ===== */
+@media (max-width: 768px) {
+  .aiassistant-inputbar { max-width: 95%; }
+  .ai-msg, .user-msg { max-width: 85%; font-size: 0.9rem; }
+  .quick-replies { justify-content: flex-start; }
 }
 
 
 /* ========== SETTINGS PAGE ========== */
+/* =========================================================
+   🔹 SETTINGS PAGE STYLES
+   ========================================================= */
 
 .settings-container {
-  padding: 5rem 3rem;
+  padding: 4rem 2rem;
   background-color: #f9fafb;
   min-height: 100vh;
   box-sizing: border-box;
 }
 
-/* --- Chrome-style Tabs --- */
+/* --- Tabs --- */
 .settings-tabs {
   display: flex;
   justify-content: center;
@@ -2783,7 +2861,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* --- Content --- */
+/* --- Content Area --- */
 .settings-content {
   background: white;
   padding: 2rem;
@@ -2794,12 +2872,18 @@ body {
   transition: all 0.3s ease;
 }
 
+/* --- Cards / Sections --- */
+.settings-card {
+  margin-bottom: 2rem;
+}
+
 .settings-card h3 {
   font-size: 1.25rem;
   margin-bottom: 1.5rem;
   color: #111827;
 }
 
+/* --- Rows --- */
 .settings-row {
   display: flex;
   align-items: center;
@@ -2809,41 +2893,77 @@ body {
   gap: 1rem;
 }
 
-.settings-row label {
+.settings-label {
   flex: 1;
   font-weight: 500;
   color: #374151;
 }
 
+.settings-input {
+  flex: 2;
+}
+
+/* Inputs & Selects */
 .settings-row select,
+.settings-row input[type="text"],
+.settings-row input[type="email"],
 .settings-row input[type="password"],
 .settings-row input[type="range"] {
-  flex: 2;
+  width: 100%;
   padding: 0.5rem;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 0.95rem;
 }
 
+/* Range with value */
+.range-with-value {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Checkboxes */
 .settings-row input[type="checkbox"] {
   transform: scale(1.2);
   cursor: pointer;
 }
 
-.logout-btn {
+/* --- Action Buttons --- */
+.settings-actions {
+  display: flex;
+  gap: 1rem;
   margin-top: 1rem;
-  background: #ff4b2b;
+}
+
+.btn-primary {
+  background-color: #3b82f6;
   color: white;
+  padding: 0.6rem 1.2rem;
   border: none;
-  padding: 0.75rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 
-.logout-btn:hover {
-  background: #e13e20;
+.btn-primary:hover {
+  background-color: #2563eb;
+}
+
+.btn-secondary {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #dc2626;
 }
 
 /* --- Reset Button --- */
@@ -2867,6 +2987,35 @@ body {
   background: #ff4b2b;
   color: white;
 }
+
+/* --- Account Info Display --- */
+.account-info {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 1rem;
+}
+
+.account-info div {
+  margin-bottom: 0.25rem;
+}
+
+/* --- Mobile adjustments --- */
+@media (max-width: 768px) {
+  .settings-content {
+    padding: 1.5rem;
+  }
+
+  .settings-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .settings-label,
+  .settings-input {
+    flex: 1 1 100%;
+  }
+}
+
 
 
 /* === Support Page Styles === */
