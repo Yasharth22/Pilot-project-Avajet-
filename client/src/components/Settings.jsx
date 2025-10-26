@@ -21,6 +21,7 @@ const Settings = () => {
     fontSize: 16,
     layout: "compact",
     dateFormat: "12h",
+    openDocsInNewTab: true,
     aiTypingSpeed: 3,
     aiTypingDots: true,
     aiSaveHistory: true,
@@ -159,6 +160,20 @@ const Settings = () => {
           >
             <option value="12h">12-Hour</option>
             <option value="24h">24-Hour</option>
+          </select>
+        </SettingsRow>
+      </SettingsSection>
+
+      <SettingsSection title="Document Handling">
+        <SettingsRow label="Open Documents In">
+          <select
+            value={settings.openDocsInNewTab ? "new" : "same"}
+            onChange={(e) =>
+              handleChange("openDocsInNewTab", e.target.value === "new")
+            }
+          >
+            <option value="new">New Window/Tab</option>
+            <option value="same">Same Window</option>
           </select>
         </SettingsRow>
       </SettingsSection>
@@ -313,7 +328,9 @@ const Settings = () => {
                 type="password"
                 value={passwords.current}
                 placeholder="Enter current password"
-                onChange={(e) => handlePasswordChange("current", e.target.value)}
+                onChange={(e) =>
+                  handlePasswordChange("current", e.target.value)
+                }
               />
             </SettingsRow>
 
@@ -352,7 +369,11 @@ const Settings = () => {
 
           <div
             className="account-info"
-            style={{ marginTop: "1.5rem", fontSize: "0.9rem", color: "#6b7280" }}
+            style={{
+              marginTop: "1.5rem",
+              fontSize: "0.9rem",
+              color: "#6b7280",
+            }}
           >
             <div>Last Login: {lastLogin}</div>
             <div>Account Created: {accountCreated}</div>
