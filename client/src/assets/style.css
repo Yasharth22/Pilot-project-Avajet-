@@ -1266,6 +1266,150 @@ footer a {
   box-sizing: border-box;
 }
 
+/* === CONFIGURATIONS PAGE === */
+
+.config-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.config-parent-link {
+  color: #333;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.config-parent-link:hover {
+  text-decoration: underline;
+}
+
+.config-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.config-checkbox input {
+  width: 16px;
+  height: 16px;
+}
+
+/* === FILTER BAR === */
+.config-filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.config-search-input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.2s ease-in-out;
+}
+
+.config-search-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+}
+
+.config-select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.config-select:hover {
+  border-color: #007bff;
+}
+
+/* === TABLE CONTAINER === */
+.config-table-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.config-table th {
+  background-color: #f0f0f0;
+  color: #333;
+  text-align: left;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-bottom: 2px solid #ddd;
+  font-size: 0.95rem;
+}
+
+.config-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.config-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.config-table td.text-center {
+  text-align: center;
+}
+
+/* === ACTION BUTTON === */
+.config-action-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.35rem 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.config-action-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* === PLACEHOLDER CARD (for non-active tabs) === */
+.placeholder-card {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
+}
+
 
 /* =================================== */
 /* ===== CAMO ANALYTICS DASHBOARD STYLES ===== */
