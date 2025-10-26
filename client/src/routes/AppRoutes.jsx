@@ -28,6 +28,7 @@ import AIAssistant from '../pages/AIAssistant';
 import Settings from '../components/Settings';
 import Support from '../components/Support';
 import Forum from '../pages/Forum';
+import AircraftAccountModal from '../components/AircraftAccountModal';
 
 const AppRoutes = () => {
   return (
@@ -168,6 +169,17 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/aircraft-account"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <AircraftAccountModal />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
 
       <Route
         path="/my-materials"
